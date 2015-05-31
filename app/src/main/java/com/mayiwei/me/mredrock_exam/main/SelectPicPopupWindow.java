@@ -45,7 +45,7 @@ public class SelectPicPopupWindow extends Activity implements OnClickListener{
 
         layout=(LinearLayout)findViewById(R.id.pop_layout);
 
-        pic = getIntent().getStringExtra("pic");
+
 
         //添加选择窗口范围监听可以优先获取触点，即不再执行onTouchEvent()函数，点击其他地方时执行onTouchEvent()函数销毁Activity
         layout.setOnClickListener(new OnClickListener() {
@@ -69,6 +69,7 @@ public class SelectPicPopupWindow extends Activity implements OnClickListener{
     }
 
     public void onClick(View v) {
+        pic = getIntent().getStringExtra("pic");
         switch (v.getId()) {
             case R.id.btn_save_photo:
                 showDilog(btn_save_photo);
@@ -107,7 +108,7 @@ public class SelectPicPopupWindow extends Activity implements OnClickListener{
                         sendSMS(pic);
                         break;
 
-                    case 3:	//调用系统分享
+                    case 2:	//调用系统分享
                         Intent intent=new Intent(Intent.ACTION_SEND);
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT,"分享");
