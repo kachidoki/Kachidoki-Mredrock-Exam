@@ -100,15 +100,15 @@ public class SelectPicPopupWindow extends Activity implements OnClickListener{
                 // TODO Auto-generated method stub
                 dialog.dismiss();
                 switch (which) {
-                    case 0:	//邮件
+                    case 0://邮件
                         sendMail(pic);
                         break;
 
-                    case 1:	//短信
+                    case 1://短信
                         sendSMS(pic);
                         break;
 
-                    case 2:	//调用系统分享
+                    case 2://调用系统分享
                         Intent intent=new Intent(Intent.ACTION_SEND);
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_SUBJECT,"分享");
