@@ -3,14 +3,20 @@ package com.mayiwei.me.net;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.util.Log;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -128,6 +134,75 @@ public class Net {
 
         }).start();
 
+    }
+
+    //post请求
+    public  void  netPost(final String url, final Map<String,String> params, final StrCallback callback) {
+        //在主线程new一个handler;
+        //handler.post会把Runable扔给主线程去运行。
+        final Handler handler = new Handler();
+
+        //开启线程
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                //请求参数
+                StringBuilder paramsStr = new StringBuilder();
+
+                if (params!=null){
+
+                    //构造参数  参数格式什么的百度"HTTP请求 POST与GET"相关
+                    Iterator<Map.Entry<String,String>> iterator = params.entrySet().iterator();
+                    while (iterator.hasNext()){
+                        Map.Entry<String, String> entry = iterator.next();
+                        paramsStr.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                    }
+                }
+
+
+                //开始网络请求
+                final String result = httpRequest(url, paramsStr.toString());
+
+                //回调请求结果
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.response(result);
+                    }
+                });
+
+            }
+        }).start();
+    }
+
+    public String httpRequest(String url, String params){
+        URL realurl = null;
+        InputStream in = null;
+        HttpURLConnection conn = null;
+        String result = "";
+        try{
+            realurl = new URL(url);
+            conn = (HttpURLConnection)realurl.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            PrintWriter pw = new PrintWriter(conn.getOutputStream());
+            pw.print(params);
+            pw.flush();
+            pw.close();
+            Log.i("test", "url:" + url);
+            Log.i("test","params:"+params);
+
+            in = conn.getInputStream();
+            BufferedReader bin = new BufferedReader(new InputStreamReader(in));
+            String line;
+            while ((line = bin.readLine()) != null) {
+                result += line;
+            }
+        }catch(Exception eio){
+            result = "error:"+eio.getMessage();
+        }
+        return result;
     }
 
 

@@ -42,7 +42,7 @@
                 android:gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                android:text="功能三"/>
+                android:text="知乎问题"/>
         </LinearLayout>
         <View
             android:id="@+id/slider"
