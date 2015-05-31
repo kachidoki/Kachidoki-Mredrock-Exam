@@ -27,6 +27,11 @@
             android:name=".main.GirlItem_Activity"
             android:label="妹子图">
         </activity>
+        <activity
+            android:name=".main.SelectPicPopupWindow"
+            android:label="菜单"
+            android:theme="@style/MyDialogStyleBottom">
+        </activity>
 
     </application>
 

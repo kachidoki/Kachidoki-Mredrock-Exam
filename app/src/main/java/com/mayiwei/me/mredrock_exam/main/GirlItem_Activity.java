@@ -55,56 +55,63 @@ public class GirlItem_Activity extends BaseActivity {
             }
         });
 
-        img_girl.setOnClickListener(new View.OnClickListener() {
+//        img_girl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mSaveDialog = ProgressDialog.show(GirlItem_Activity.this, "保存图片", "图片正在保存中，请稍等...", true);
+//                new Thread(saveFileRunnable).start();
+//            }
+//        });
+        img_girl.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
-                mSaveDialog = ProgressDialog.show(GirlItem_Activity.this, "保存图片", "图片正在保存中，请稍等...", true);
-                new Thread(saveFileRunnable).start();
+            public boolean onLongClick(View view) {
+                startActivity(new Intent(GirlItem_Activity.this,SelectPicPopupWindow.class));
+                return false;
             }
         });
     }
 
-    /**
-     * 保存文件
-     * @param bm
-     * @param fileName
-     * @throws IOException
-     */
-    public void saveFile(Bitmap bm, String fileName) throws IOException {
-        File dirFile = new File(ALBUM_PATH);
-        if(!dirFile.exists()){
-            dirFile.mkdir();
-        }
-        File myCaptureFile = new File(ALBUM_PATH + fileName);
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
-        bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
-        bos.flush();
-        bos.close();
-    }
-
-    private Runnable saveFileRunnable = new Runnable(){
-        @Override
-        public void run() {
-            try {
-                saveFile(mBitmap, mFileName);
-                mSaveMessage = "图片保存成功！";
-            } catch (IOException e) {
-                mSaveMessage = "图片保存失败！";
-                e.printStackTrace();
-            }
-            messageHandler.sendMessage(messageHandler.obtainMessage());
-        }
-
-    };
-
-    private Handler messageHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            mSaveDialog.dismiss();
-            Log.d("GirlItem_Activity", mSaveMessage);
-            Toast.makeText(GirlItem_Activity.this, mSaveMessage, Toast.LENGTH_SHORT).show();
-        }
-    };
+//    /**
+//     * 保存文件
+//     * @param bm
+//     * @param fileName
+//     * @throws IOException
+//     */
+//    public void saveFile(Bitmap bm, String fileName) throws IOException {
+//        File dirFile = new File(ALBUM_PATH);
+//        if(!dirFile.exists()){
+//            dirFile.mkdir();
+//        }
+//        File myCaptureFile = new File(ALBUM_PATH + fileName);
+//        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+//        bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+//        bos.flush();
+//        bos.close();
+//    }
+//
+//    private Runnable saveFileRunnable = new Runnable(){
+//        @Override
+//        public void run() {
+//            try {
+//                saveFile(mBitmap, mFileName);
+//                mSaveMessage = "图片保存成功！";
+//            } catch (IOException e) {
+//                mSaveMessage = "图片保存失败！";
+//                e.printStackTrace();
+//            }
+//            messageHandler.sendMessage(messageHandler.obtainMessage());
+//        }
+//
+//    };
+//
+//    private Handler messageHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            mSaveDialog.dismiss();
+//            Log.d("GirlItem_Activity", mSaveMessage);
+//            Toast.makeText(GirlItem_Activity.this, mSaveMessage, Toast.LENGTH_SHORT).show();
+//        }
+//    };
 
 
 }
