@@ -24,7 +24,7 @@ public class UpdateInfoProvider {
             while (type != XmlPullParser.END_DOCUMENT) {
                 switch (type) {
                     case XmlPullParser.START_TAG:
-                        if ("VersionCode".equals(parser.getName())) {
+                        if ("versionCode".equals(parser.getName())) {
                             String VersionCode = parser.nextText();
                             info.setVersionCode(VersionCode);
                         } else if ("versionName".equals(parser.getName())) {

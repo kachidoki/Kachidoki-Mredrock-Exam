@@ -34,11 +34,15 @@ import com.mayiwei.me.mredrock_exam.model.bean.UpdataInfo;
 public class UpdateManager {
     private Context mContext;
 
+    private UpdataInfo info;
+    private Handler handler=new Handler();
+
     //提示语
     private String updateMsg = "有最新的软件包哦，尽管是坑也要入";
 
     //返回的安装包url
-    private String apkUrl = "http://hongyan.cqupt.edu.cn/app/com.mredrock.cyxbs.apk";
+//    private String apkUrl = "http://hongyan.cqupt.edu.cn/app/com.mredrock.cyxbs.apk";
+    private String apkUrl = "";
 
 
     private Dialog noticeDialog;
@@ -84,40 +88,40 @@ public class UpdateManager {
     }
 
     //外部接口让主Activity调用
-    public void checkUpdateInfo(){
-        try {
-            URL url=new URL(API.Mredrock_DownLoad);
-            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            //连接超时时间
-            conn.setConnectTimeout(5000);
-            int code = conn.getResponseCode();
-            if(code==200){
-                InputStream is=conn.getInputStream();
-                UpdataInfo updateInfo=new UpdataInfo();
-                updateInfo=UpdateInfoProvider.getUpdateInfo(is);
-                Log.i("XML",updateInfo.getApkURL());
-                if(updateInfo!=null){
-                    //解析成功
-                    Log.i("XMLTest","解析成功");
-                    apkUrl = updateInfo.getApkURL();
+    public void checkUpdateInfo(final OnCallBack callBack){
 
-                }else{
-                    //解析失败
-                     Log.i("XMLTest","解析失败");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url=new URL(API.Mredrock_DownLoad);
+                    HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    //连接超时时间
+                    conn.setConnectTimeout(5000);
+                    int code = conn.getResponseCode();
+                    if(code==200){
+                        InputStream is=conn.getInputStream();
+                        UpdateInfoProvider provider=new UpdateInfoProvider();
+                        info=provider.getUpdateInfo(is);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                apkUrl=info.getApkURL();
+                                Log.i("XMLTest","----apkurl--"+apkUrl);
+                                callBack.callBack(info);
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-        showNoticeDialog();
+        }).start();
     }
 
 
-    private void showNoticeDialog(){
+    public void showNoticeDialog(){
         AlertDialog.Builder builder = new Builder(mContext);
         builder.setTitle("软件版本更新");
         builder.setMessage(updateMsg);
@@ -230,5 +234,9 @@ public class UpdateManager {
         i.setDataAndType(Uri.parse("file://" + apkfile.toString()), "application/vnd.android.package-archive");
         mContext.startActivity(i);
 
+    }
+
+    public interface OnCallBack {
+        void callBack(UpdataInfo info);
     }
 }

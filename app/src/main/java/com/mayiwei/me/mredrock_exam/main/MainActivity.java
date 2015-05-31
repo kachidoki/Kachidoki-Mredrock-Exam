@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.mayiwei.me.mredrock_exam.R;
 import com.mayiwei.me.mredrock_exam.app.BaseActivity;
+import com.mayiwei.me.mredrock_exam.model.bean.UpdataInfo;
 import com.mayiwei.me.mredrock_exam.util.UpdateManager;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class MainActivity extends BaseActivity {
     private View2_Fragment fragment2;
     private View3_Fragment fragment3;
     private List<Fragment> fragments;
+    private String apkUrl="";
 
     private UpdateManager mUpdateManager;
 
@@ -137,7 +140,21 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_updata) {
             //这里来检测版本是否需要更新
             mUpdateManager = new UpdateManager(this);
-            mUpdateManager.checkUpdateInfo();
+            mUpdateManager.checkUpdateInfo(new UpdateManager.OnCallBack() {
+                @Override
+                public void callBack(UpdataInfo info) {
+                    if(info!=null){
+                        //解析成功
+                        apkUrl = info.getApkURL();
+                        Log.i("XMLTest", "----url--" + apkUrl);
+                        mUpdateManager.showNoticeDialog();
+
+                    }else{
+                        //解析失败
+                        Log.i("XMLTest","解析失败");
+                    }
+                }
+            });
             return true;
         }
 
