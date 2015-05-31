@@ -18,6 +18,7 @@ import com.mayiwei.me.mredrock_exam.app.BaseActivity;
 import com.mayiwei.me.net.Net;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,7 +66,12 @@ public class GirlItem_Activity extends BaseActivity {
         img_girl.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                startActivity(new Intent(GirlItem_Activity.this,SelectPicPopupWindow.class));
+                Intent intent = new Intent(GirlItem_Activity.this,SelectPicPopupWindow.class);
+                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte [] bitmapByte =baos.toByteArray();
+                intent.putExtra("bitmap", bitmapByte);
+                startActivity(intent);
                 return false;
             }
         });

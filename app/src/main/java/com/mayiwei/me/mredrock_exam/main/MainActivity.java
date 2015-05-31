@@ -46,9 +46,9 @@ public class MainActivity extends BaseActivity {
         InitTextView();
     }
     private void InitTextView() {
-        textView1 = (TextView) findViewById(R.id.text1);
-        textView2 = (TextView) findViewById(R.id.text2);
-        textView3 = (TextView) findViewById(R.id.text3);
+        textView1 = $(R.id.text1);
+        textView2 = $(R.id.text2);
+        textView3 = $(R.id.text3);
 
         textView1.setOnClickListener(new MyOnClickListener(0));
         textView2.setOnClickListener(new MyOnClickListener(1));

@@ -1,8 +1,12 @@
 package com.mayiwei.me.mredrock_exam.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.malinskiy.superrecyclerview.OnMoreListener;
@@ -23,6 +28,10 @@ import com.mayiwei.me.mredrock_exam.model.bean.GirlComments;
 import com.mayiwei.me.mredrock_exam.model.bean.Result;
 import com.mayiwei.me.net.Net;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -204,6 +213,5 @@ public class View1_Fragment extends Fragment {
             this.comments = comments;
         }
     }
-
 
 }
